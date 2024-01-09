@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
-use App\Models\Article;
 use Illuminate\Support\Facades\Route;
-use Ramsey\Uuid\Type\Integer;
+use App\Http\Controllers\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,25 +20,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
-Route::get('article', function (){
-    return Article::all();    
-});
+Route::get('articles', [ArticleController::class, 'index']);
 
-Route::get('article/{id}', function ($id){
-    return Article::find($id);    
-});
+Route::get('articles/{article}', [ArticleController::class, 'show']);
 
-Route::post('article', function (Request $request){
-    return Article::create($request->all());    
-});
+Route::post('articles', [ArticleController::class, 'create']);
 
-Route::put('article/{id}', function (Request $request, $id){
-    $article = Article::find($id);
-    $article->update($request->all());
-    return $article;    
-});
+Route::put('articles/{article}', [ArticleController::class, 'update']);
 
-Route::delete('article/{id}', function($id){
-    Article::find($id)->delete();
-    return 204;
-});
+Route::delete('articles/{article}', [ArticleController::class, 'destroy']);
