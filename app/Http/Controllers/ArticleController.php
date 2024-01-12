@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Http\Requests\ArticleRequest;
-use Exception;
 
 class ArticleController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['only' => ['create', 'store', 'show', 'edit', 'update', 'destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */
