@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Article;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Seeder;
 
 class ArticleTableSeeder extends Seeder
@@ -18,14 +20,22 @@ class ArticleTableSeeder extends Seeder
 
         $faker = \Faker\Factory::create();
 
-        for ($i = 0; $i < 50; $i++){
-            
-            Article::create([
-                'title' => $faker->sentence, 
-                'body' => $faker->paragraph(),
-            ]);
+        $users = User::all();
 
-        }
+        foreach($users as $user){
+
+            Auth::attempt(['email' => $user->email, 'password' => '123456']);
+    
+            $num_articles = 2;
+            
+            for($j = 0; $j < $num_articles; $j++) {
+                Article::create([
+                    'title' => $faker->sentence,  
+                    'body' => $faker->paragraph(), 
+                ]);
+            }
+
+        }    
 
     }
 }
