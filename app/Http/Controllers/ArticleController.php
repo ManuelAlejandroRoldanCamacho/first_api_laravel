@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Http\Resources\Article as ArticleResource;
+use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\ArticleRequest;
 
 class ArticleController extends Controller
@@ -18,7 +20,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return Article::all();
+        return new ArticleCollection(Article::paginate());
     }
 
     /**
@@ -27,7 +29,7 @@ class ArticleController extends Controller
     public function create(ArticleRequest $request)
     {
         $article = Article::create($request->only(['title', 'body']));
-        return response()->json($article, 201);
+        return new ArticleResource($article);
     }
 
     /**
@@ -43,7 +45,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        return $article;       
+        return new ArticleResource($article);       
     }
 
     /**
@@ -60,7 +62,7 @@ class ArticleController extends Controller
     public function update(ArticleRequest $request, Article $article)
     {
         $article->update($request->only(['title', 'body']));
-        return response()->json($article, 200);
+        return new ArticleResource($article);
     }
 
     /**
@@ -69,6 +71,6 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         $article->delete();
-        return response()->json(null, 204);
+        return new ArticleResource($article);
     }
 }
